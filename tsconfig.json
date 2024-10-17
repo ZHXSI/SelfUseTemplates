@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist", // 输出目录
+    "target": "ESNext", // 目标转化的语法
+    "module": "ESNext", // 转化的格式
+    "moduleResolution": "Node", // 解析规则
+    // "strict": false, // 严格模式
+    "sourceMap": true, // 启动sourcemap调试
+    "jsx": "preserve", // 不允许ts编译jsx语法
+    "jsxImportSource": "vue", // jsx语法转化的库
+    "jsxFactory": "h", // jsx语法转化的函数
+    "jsxFragmentFactory": "Fragment", // jsx语法转化的函数
+    "esModuleInterop": true, // es6和commonjs 转化
+    "lib": [
+      "ESNext",
+      "DOM",
+      "WebWorker"
+    ], // 编译时引入的库
+    "allowJs": true, // 允许js文件编译
+    "resolveJsonModule": true, // 支持json文件
+    "skipLibCheck": true, // 跳过lib检查
+    "isolatedModules": true, // 每个文件都是独立的模块
+    "verbatimModuleSyntax": true, // 保留模块语法
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "types": [
+      "node"
+    ], // 引入node类型
+  },
+  "include": [
+    "./src/**/*",
+    "typings"
+  ],
+}
