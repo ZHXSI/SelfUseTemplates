@@ -1,27 +1,28 @@
 <template>
   <div>
-    <el-config-provider :locale="lang[locale]">
+    <el-config-provider :locale="lang[I18nCache.lang]">
       <router-view v-if="isRouterAlive" />
     </el-config-provider>
   </div>
 </template>
 
 <script setup lang="ts">
-import zh from "element-plus/es/locale/lang/zh-cn";
-import en from "element-plus/es/locale/lang/en";
-const { locale } = useI18n();
+import zh from 'element-plus/es/locale/lang/zh-cn'
+import en from 'element-plus/es/locale/lang/en'
+const I18nCache = useI18nCache()
 const lang = ref({
   zh,
-  en
+  en,
 })
-const isRouterAlive = ref(true);
+const isRouterAlive = ref(true)
 const reload = () => {
-  isRouterAlive.value = false;
+  isRouterAlive.value = false
   nextTick(function () {
-    isRouterAlive.value = true;
-  });
-};
-provide("reload", reload);
+    isRouterAlive.value = true
+  })
+}
+// internationalization
+provide('reload', reload)
 </script>
 
 <style scoped></style>

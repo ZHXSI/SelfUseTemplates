@@ -1,81 +1,67 @@
 <template>
-  <!-- flex justify-between p-2 items-center border-b dark:border-gray-600 bg-slate-200" -->
-  <header class="flex items-center border-b dark:border-gray-600 bg-slate-200">
-    <!-- <span v-for="(item, index) in filterRoutes(router.getRoutes())" :key="index" class="p-2" @click="details(item)">
-      {{ item.meta.title }}
-    </span> -->
-    <!-- <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-      <el-menu-item index="1">Processing Center</el-menu-item>
-      <el-sub-menu index="2">
-        <template #title>Workspace</template>
-<el-menu-item index="2-1">item one</el-menu-item>
-<el-menu-item index="2-2">item two</el-menu-item>
-<el-menu-item index="2-3">item three</el-menu-item>
-<el-sub-menu index="2-4">
-  <template #title>item four</template>
-  <el-menu-item index="2-4-1">item one</el-menu-item>
-  <el-menu-item index="2-4-2">item two</el-menu-item>
-  <el-menu-item index="2-4-3">item three</el-menu-item>
-</el-sub-menu>
-</el-sub-menu>
-<el-menu-item index="3" disabled>Info</el-menu-item>
-<el-menu-item index="4">Orders</el-menu-item>
-</el-menu> -->
-    <Menu :menuItem="filterRoutes(router.getRoutes())" class="w-full"></Menu>
-    <!-- <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-      <template v-for="(item, index) in filterRoutes(router.getRoutes())">
-        <el-menu-item :index="String(index)" @click="details(item)">
+  <header class="flex items-center border-b bg-slate-200 dark:border-gray-600">
+    <el-menu
+      mode="horizontal"
+      :default-active="routerCache.currentPage"
+      class="!m-auto w-1/2"
+    >
+      <template v-for="(item, index) in filteredRoutes" :key="index">
+        <el-menu-item
+          v-if="isSingleChild(item)"
+          :index="item.children[0].path"
+          @click="handleMenuItemClick(item.children[0].path)"
+        >
           {{ item.meta.title }}
         </el-menu-item>
-      </template> -->
-    <!-- <el-menu-item index="1">Processing Center</el-menu-item>
-      <el-sub-menu index="2">
-        <template #title>Workspace</template>
-        <el-menu-item index="2-1">item one</el-menu-item>
-        <el-menu-item index="2-2">item two</el-menu-item>
-        <el-menu-item index="2-3">item three</el-menu-item>
-        <el-sub-menu index="2-4">
-          <template #title>item four</template>
-          <el-menu-item index="2-4-1">item one</el-menu-item>
-          <el-menu-item index="2-4-2">item two</el-menu-item>
-          <el-menu-item index="2-4-3">item three</el-menu-item>
+        <el-sub-menu v-else :index="item.path">
+          <template #title> {{ item.meta.title }} </template>
+          <Submenu :menuItem="item.children" />
         </el-sub-menu>
-      </el-sub-menu>
-      <el-menu-item index="3" disabled>Info</el-menu-item>
-      <el-menu-item index="4">Orders</el-menu-item> -->
-    <!-- </el-menu> -->
+      </template>
+    </el-menu>
+    <el-button @click="switchLanguages">12</el-button>
   </header>
 </template>
-
 <script setup lang="ts">
-import type { RouteRecordRaw } from "vue-router";
-import Menu from "./components/Menu.vue";
-const router = useRouter();
+import Submenu from './components/Submenu.vue'
+import { type RouteRecordRaw, useRouter } from 'vue-router'
+const router = useRouter()
 const filterRoutes = (
   routes: RouteRecordRaw[],
   level: number = 1,
 ): RouteRecordRaw[] => {
   return routes
-    .filter((route) =>
-      route.path !== "/404" &&
-      (level > 1 || route.redirect !== undefined) &&
-      !route.hidden
+    .filter(
+      route =>
+        route.path !== '/404' &&
+        (level > 1 || route.redirect !== undefined) &&
+        !route.hidden,
     )
-    .map((route) => {
+    .map(route => {
       if (route.children) {
-        route.children = filterRoutes(route.children, level + 1);
+        route.children = filterRoutes(route.children, level + 1)
       }
-      return route;
-    });
-};
-// const details = (item: RouteRecordRaw) => {
-//   console.log(item);
-// }
-// const activeIndex = ref('1')
-// const activeIndex2 = ref('1')
-// const handleSelect = (key: string, keyPath: string[]) => {
-//   console.log(key, keyPath)
-// }
+      return route
+    })
+}
+const filteredRoutes = computed(() => filterRoutes(router.getRoutes()))
+const isSingleChild = (route: RouteRecordRaw): boolean => {
+  return (
+    route.children &&
+    ((route.children.length === 1 &&
+      (!route.children[0].children ||
+        route.children[0].children.length === 0)) ||
+      route.children.length === 0)
+  )
+}
+const handleMenuItemClick = (path: string) => {
+  router.push(path)
+}
+const routerCache = useRouterCache()
+const I18nCache = useI18nCache()
+const switchLanguages = () => {
+  I18nCache.changeLanguage(I18nCache.lang === 'zh' ? 'en' : 'zh')
+}
 </script>
 
 <style scoped></style>

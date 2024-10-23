@@ -8,15 +8,22 @@
   </main>
 </template>
 <script setup lang="ts">
-const routerCache = useRouterCache();
-const route = useRoute();
-// const router = useRouter();
-watch(route, (to) => {
-  routerCache.addCacheRoute(to.name);
-});
-// const handleClick = () => {
-//   router.push(route.path === '/components1' ? '/components2' : '/components1');
-// };
+const routerCache = useRouterCache()
+const route = useRoute()
+watch(route, to => {
+  routerCache.addCacheRoute(to)
+})
+const handleBeforeUnload = () => {
+  routerCache.clearCacheRoute(route)
+}
+// 这里是监听页面刷新或离开的事件
+onMounted(() => {
+  window.addEventListener('beforeunload', handleBeforeUnload)
+})
+// 这里是监听页面即将卸载的事件
+onBeforeUnmount(() => {
+  window.removeEventListener('beforeunload', handleBeforeUnload)
+})
 </script>
 
 <style scoped></style>

@@ -1,11 +1,11 @@
 <template>
-  <footer class="flex justify-between p-2 items-center border-b dark:border-gray-600 bg-slate-200">
+  <footer
+    class="flex items-center justify-between border-b bg-slate-200 p-2 dark:border-gray-600"
+  >
     3
   </footer>
 </template>
 
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 
 <style scoped></style>

@@ -1,7 +1,7 @@
-import service from "@/utils/service";
+import service from '@/utils/service'
 export function getCode() {
-    return service({
-        url: `/countries/code/list`,
-        method: "POST",
-    })
+  return service({
+    url: `/countries/code/list`,
+    method: 'POST',
+  })
 }

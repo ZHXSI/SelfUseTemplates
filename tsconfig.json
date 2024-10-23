@@ -1,37 +1,38 @@
 {
   "compilerOptions": {
-    "outDir": "./dist", // 输出目录
-    "target": "ESNext", // 目标转化的语法
-    "module": "ESNext", // 转化的格式
-    "moduleResolution": "Node", // 解析规则
-    // "strict": false, // 严格模式
-    "sourceMap": true, // 启动sourcemap调试
-    "jsx": "preserve", // 不允许ts编译jsx语法
-    "jsxImportSource": "vue", // jsx语法转化的库
-    "jsxFactory": "h", // jsx语法转化的函数
-    "jsxFragmentFactory": "Fragment", // jsx语法转化的函数
-    "esModuleInterop": true, // es6和commonjs 转化
+    "outDir": "./dist", // 指定输出目录
+    "target": "ESNext", // 指定 ECMAScript 目标版本
+    "module": "ESNext", // 指定模块系统
+    "moduleResolution": "Node", // 指定模块解析策略
+    // "strict": false, // 启用所有严格类型检查选项
+    "sourceMap": true, // 生成对应的 .map 文件
+    "jsx": "preserve", // 保留 JSX 语法以供进一步处理
+    "jsxImportSource": "vue", // 指定 JSX 语法的库
+    "jsxFactory": "h", // 指定 JSX 转换函数
+    "jsxFragmentFactory": "Fragment", // 指定 JSX 片段转换函数
+    "esModuleInterop": true, // 允许 ES 模块与 CommonJS 模块互操作
     "lib": [
-      "ESNext",
-      "DOM",
-      "WebWorker"
-    ], // 编译时引入的库
-    "allowJs": true, // 允许js文件编译
-    "resolveJsonModule": true, // 支持json文件
-    "skipLibCheck": true, // 跳过lib检查
-    "isolatedModules": true, // 每个文件都是独立的模块
+      "ESNext", // 包含最新的 ECMAScript 标准库
+      "DOM", // 包含 DOM API
+      "WebWorker" // 包含 Web Worker API
+    ], // 指定编译时包含的库
+    "allowJs": true, // 允许编译 JavaScript 文件
+    "resolveJsonModule": true, // 支持导入 JSON 文件
+    "skipLibCheck": true, // 跳过库文件的类型检查
+    "isolatedModules": true, // 启用每个文件作为单独的模块
     "verbatimModuleSyntax": true, // 保留模块语法
     "paths": {
       "@/*": [
         "./src/*"
       ]
-    },
+    }, // 配置模块路径映射
     "types": [
-      "node"
-    ], // 引入node类型
+      "node", // 引入 Node.js 类型定义
+      "@vitejs/plugin-vue-jsx" // 引入 Vite Vue JSX 插件类型定义
+    ] // 指定要包含的类型定义文件
   },
   "include": [
-    "./src/**/*",
-    "typings"
-  ],
+    "./src/**/*", // 包含 src 目录下的所有文件
+    "typings" // 包含 typings 目录
+  ] // 指定要包含的文件
 }
