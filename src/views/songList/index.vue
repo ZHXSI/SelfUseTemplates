@@ -16,14 +16,21 @@
   </div>
 </template>
 <script setup lang="ts">
+import { getList } from '@/api/countries'
+
 defineOptions({
   name: 'songList',
 })
 import { getCode } from '@/api/countries'
-// const input = ref()
+type Lstype = string | number
+const list: Ref<Lstype[]> = ref([])
 onMounted(() => {
   getCode().then(res => {
     console.log(res)
+  })
+  getList().then(res => {
+    list.value = res.data
+    console.log(123, list.value)
   })
 })
 //

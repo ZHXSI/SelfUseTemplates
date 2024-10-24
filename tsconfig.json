@@ -11,6 +11,7 @@
     "jsxFactory": "h", // 指定 JSX 转换函数
     "jsxFragmentFactory": "Fragment", // 指定 JSX 片段转换函数
     "esModuleInterop": true, // 允许 ES 模块与 CommonJS 模块互操作
+    "allowSyntheticDefaultImports": true,//控制是否允许从没有设置默认导出的模块中默认导入
     "lib": [
       "ESNext", // 包含最新的 ECMAScript 标准库
       "DOM", // 包含 DOM API

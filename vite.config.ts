@@ -2,12 +2,15 @@ import { defineConfig, loadEnv } from 'vite' // Vite 配置
 import vue from '@vitejs/plugin-vue' // Vue 插件
 import vueJsx from '@vitejs/plugin-vue-jsx' // Vue JSX 插件
 import { fileURLToPath, URL } from 'node:url' // Node.js URL 模块
-import viteEslint from 'vite-plugin-eslint' // ESLint 插件
 import AutoImport from 'unplugin-auto-import/vite' // 自动导入插件
 import Components from 'unplugin-vue-components/vite' // 组件自动导入插件
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers' // Element Plus 解析器
 import legacy from '@vitejs/plugin-legacy' // 旧版浏览器支持插件
 import viteCompression from 'vite-plugin-compression' // 压缩插件
+import tailwind from 'tailwindcss' // Tailwind CSS 插件
+import tailwindConfig from './tailwind.config' // Tailwind CSS 配置
+import autoprefixer from 'autoprefixer' // Autoprefixer 插件
+
 export default defineConfig(({ mode }) => {
   // 加载环境变量
   const { VITE_APP_HOST, VITE_APP_PORT } = loadEnv(
@@ -20,8 +23,8 @@ export default defineConfig(({ mode }) => {
       vue(), // Vue 插件
       vueJsx(), // Vue JSX 插件
       AutoImport({
-        dts: 'typings/auto-imports.d.ts', // 自动导入类型声明文件
-        resolvers: [ElementPlusResolver()], // 解析器
+        dts: 'typings/auto-imports.d.ts', // 自动生成的类型声明文件
+        resolvers: [ElementPlusResolver()], // Element Plus 解析器
         eslintrc: {
           enabled: true, // 启用 ESLint 配置
           filepath: './typings/.eslintrc-auto-import.js', // ESLint 配置文件路径
@@ -30,9 +33,9 @@ export default defineConfig(({ mode }) => {
         dirs: ['src/stores/modules/**'], // 自动导入的目录
       }),
       Components({
-        dts: 'typings/components.d.ts', // 组件类型声明文件
-        dirs: ['src/components'], // 组件目录
-        resolvers: [ElementPlusResolver()], // 解析器
+        dts: 'typings/components.d.ts', // 自动生成的组件类型声明文件
+        dirs: ['src/components'], // 自动导入的组件目录
+        resolvers: [ElementPlusResolver()], // Element Plus 解析器
       }),
       legacy({
         targets: ['defaults', 'not IE 11'], // 旧版浏览器支持
@@ -40,7 +43,6 @@ export default defineConfig(({ mode }) => {
       viteCompression({
         deleteOriginFile: true, // 删除原始文件
       }),
-      viteEslint({}), // ESLint 插件
     ],
     server: {
       host: VITE_APP_HOST, // 服务器主机
@@ -54,7 +56,6 @@ export default defineConfig(({ mode }) => {
           chunkFileNames: 'static/js/[hash].js', // 分块文件名
           entryFileNames: 'static/js/[hash].js', // 入口文件名
           assetFileNames: assetInfo => {
-            // 资源文件名
             const fileTypes = {
               'favicon.ico': '[name].[ext]',
               'favicon.png': '[name].[ext]',
@@ -72,11 +73,10 @@ export default defineConfig(({ mode }) => {
               }
             }
 
-            // 默认返回值
+            // Default return value
             return 'static/[name]-[hash].[ext]'
           },
           manualChunks(id) {
-            // 手动分块
             if (id.includes('node_modules')) {
               const moduleName = id
                 .toString()
@@ -108,9 +108,8 @@ export default defineConfig(({ mode }) => {
       sourcemap: false, // 禁用 sourcemap
       assetsInlineLimit: 1024 * 10, // 资源内联限制
     },
-
     envDir: fileURLToPath(new URL('./src/env', import.meta.url)), // 环境变量目录
-    publicDir: 'static', // 公共目录
+    publicDir: 'static', // 禁用公共目录
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)), // 路径别名
@@ -122,6 +121,9 @@ export default defineConfig(({ mode }) => {
           additionalData: ``, // 全局scss
           api: 'modern-compiler', // 或 'modern'
         },
+      },
+      postcss: {
+        plugins: [autoprefixer, tailwind(tailwindConfig)], // PostCSS 插件
       },
     },
   }

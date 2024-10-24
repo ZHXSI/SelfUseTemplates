@@ -1,40 +1,46 @@
+// 导入 ESLint 类型
+import type { Linter } from 'eslint'
 // 导入全局变量配置
 import globals from 'globals'
 // 导入 JavaScript 插件
-import pluginJs from '@eslint/js'
+import jsPlugin from '@eslint/js'
 // 导入 TypeScript ESLint 插件
-import tseslint from 'typescript-eslint'
+import tsPlugin from 'typescript-eslint'
 // 导入 Vue 插件
-import pluginVue from 'eslint-plugin-vue'
+import vuePlugin from 'eslint-plugin-vue'
 // 导入自动导入配置
-import autoImport from './typings/.eslintrc-auto-import.js'
+import autoImportConfig from './typings/.eslintrc-auto-import.js'
 // 导入 Vue TypeScript ESLint 配置
-import vueTsEslintConfig from '@vue/eslint-config-typescript'
+import vueTsConfig from '@vue/eslint-config-typescript'
 // 导入跳过格式化配置
-import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
+import skipFormattingConfig from '@vue/eslint-config-prettier/skip-formatting'
 
 export default [
   // 使用 JavaScript 插件的推荐配置
-  pluginJs.configs.recommended,
+  jsPlugin.configs.recommended,
   // 使用 TypeScript ESLint 的推荐配置
-  ...tseslint.configs.recommended,
+  ...tsPlugin.configs.recommended,
   // 使用 Vue 插件的基本配置
-  ...pluginVue.configs['flat/essential'],
+  ...vuePlugin.configs['flat/essential'],
   // 使用 Vue TypeScript ESLint 配置
-  ...vueTsEslintConfig(),
+  ...vueTsConfig(),
   // 跳过格式化配置
-  skipFormatting,
+  skipFormattingConfig,
   {
     // 定义需要 lint 的文件，限定在 src 目录下
     files: ['**/src/**/*.{js,mjs,cjs,ts,vue}'],
     // 设置语言选项，包括全局变量
     languageOptions: {
-      globals: { ...globals.browser, ...globals.node, ...autoImport.globals },
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        ...autoImportConfig.globals,
+      },
     },
   },
   {
     // 定义需要忽略的文件
-    ignores: ['**/typings/**', '*.*'],
+    ignores: ['**/typings/**', '*.*', '**/dist/**', '**/node_modules/**'],
   },
   {
     // 自定义规则
@@ -43,5 +49,4 @@ export default [
       'vue/multi-word-component-names': 'off',
     },
   },
-]
-// satisfies Linter.Config[]
+] satisfies Linter.Config[]

@@ -5,3 +5,10 @@ export function getCode() {
     method: 'POST',
   })
 }
+export function getList() {
+  return service({
+    baseURL: null,
+    url: `/json/data.json`,
+    method: 'POST',
+  })
+}
